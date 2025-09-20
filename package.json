@@ -1,0 +1,21 @@
+{
+  "name": "moviediscoveryapp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.21",
+    "vuetify": "^3.10.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "sass": "^1.93.0",
+    "sass-loader": "^16.0.5",
+    "vite": "^7.1.6"
+  }
+}
