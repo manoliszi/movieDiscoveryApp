@@ -2,6 +2,7 @@
 import { onMounted } from "vue"
 import { useStore } from "../stores/store"
 import { storeToRefs } from "pinia"
+import MovieCard from "../components/MovieCard.vue"
 
 const { fetchPopularMovies } = useStore()
 const { movies } = storeToRefs(useStore())
@@ -25,16 +26,7 @@ onMounted(() => {
         sm="6"
         md="3"
       >
-        <v-card>
-          <v-img
-            :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
-            height="400px"
-          />
-          <v-card-title>{{ movie.title }}</v-card-title>
-          <v-card-subtitle>
-            ⭐ {{ movie.vote_average }} | 📅 {{ movie.release_date }}
-          </v-card-subtitle>
-        </v-card>
+        <movie-card :movie="movie" />
       </v-col>
     </v-row>
   </v-container>

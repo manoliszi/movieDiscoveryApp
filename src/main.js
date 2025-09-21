@@ -11,12 +11,18 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+// Import mdi font
+import '@mdi/font/css/materialdesignicons.css'
+
 // router
 import router from './router/router' 
 
 const vuetify = createVuetify({
   components,
   directives,
+  icons: {
+    defaultSet: 'mdi',
+  },
   theme: {
     defaultTheme: 'myCustomTheme',
     themes: {

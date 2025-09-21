@@ -8,6 +8,7 @@ const BASE_URL = "https://api.themoviedb.org/3"
 export const useStore = defineStore('store', () => {
     const movies = ref([])
     const loading = ref(false)
+    const moviesDetails = ref({})
 
     const fetchPopularMovies = async() => {
         loading.value = true
@@ -28,10 +29,35 @@ export const useStore = defineStore('store', () => {
         }
     }
 
+    const fetchMovieDetails = async(id) => {
+        loading.value = true
+        try {
+            if (moviesDetails.value[id]) {
+                return 
+            }
+            const res = await fetch(
+                `${BASE_URL}/movie/${id}?language=en-US&api_key=${API_KEY}`,
+                {
+                headers: {
+                    Authorization: `Bearer ${ACCESS_TOKEN}`,
+                    "Content-Type": "application/json",
+                },
+                }
+            )
+            if (!res.ok) throw new Error("Failed to fetch movie: " + res.statusText)
+
+            moviesDetails.value[id] = await res.json()
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         movies,
         loading,
+        moviesDetails,
 
-        fetchPopularMovies
+        fetchPopularMovies,
+        fetchMovieDetails
     }
 })
