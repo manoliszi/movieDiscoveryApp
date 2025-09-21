@@ -2,6 +2,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+// Pinia
+import { createPinia } from 'pinia'
+
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -13,4 +16,10 @@ const vuetify = createVuetify({
   directives,
 })
 
-createApp(App).use(vuetify).mount('#app')
+const app = createApp(App)
+
+// order doesn’t really matter, but Pinia MUST be installed before you use stores
+app.use(createPinia()) 
+app.use(vuetify)
+
+app.mount('#app')
