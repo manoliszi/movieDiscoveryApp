@@ -1,41 +1,23 @@
-<script setup>
-import { onMounted } from "vue"
-import { useStore } from "./stores/store"
-import { storeToRefs } from "pinia"
-
-const { fetchPopularMovies } = useStore()
-const { movies } = storeToRefs(useStore())
-
-onMounted(() => {
-  fetchPopularMovies()
-})
-</script>
-
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <h1>Popular Movies</h1>
-      </v-col>
+  <v-app>
+    <!-- App Bar -->
+    <v-app-bar app color="primary" dark>
+      <v-toolbar-title>Movies ~ Series</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn text to="/">Home</v-btn>
+      <v-btn text to="/series">Series</v-btn>
+      <v-btn text to="/actors">Actors</v-btn>
+      <v-btn text to="/watchlist">Watchlist</v-btn>
+      <v-btn text to="/about">About</v-btn>
+    </v-app-bar>
 
-      <v-col
-        v-for="movie in movies"
-        :key="movie.id"
-        cols="12"
-        sm="6"
-        md="3"
-      >
-        <v-card>
-          <v-img
-            :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
-            height="400px"
-          />
-          <v-card-title>{{ movie.title }}</v-card-title>
-          <v-card-subtitle>
-            ⭐ {{ movie.vote_average }} | 📅 {{ movie.release_date }}
-          </v-card-subtitle>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+    <!-- Main Content -->
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
+
+<script setup>
+// Nothing needed here unless you want reactive state
+</script>
