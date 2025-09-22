@@ -30,7 +30,7 @@ const vuetify = createVuetify({
         dark: false, // set true for dark mode
         colors: {
           primary: '#FFD700',
-          secondary: '#531c7bff',
+          secondary: '#a28db2ff',
           accent: '#FFB347',
           background: '#F5F5F5',
           surface: '#FFFFFF',

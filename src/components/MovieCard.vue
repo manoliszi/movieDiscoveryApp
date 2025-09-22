@@ -5,15 +5,20 @@ const props = defineProps(['movie'])
 
 const router = useRouter()
 
-function goToMovie(movieId) {
-  router.push(`/movie/${movieId}`)
+function handleClick(movieId, event) {
+  const card = event.currentTarget
+  card.classList.add('zooming')
+
+  setTimeout(() => {
+    router.push(`/movie/${movieId}`)
+  }, 300)
 }
 </script>
 
 <template>
   <v-card
-    class="elevation-0 pa-2"
-    @click="goToMovie(movie.id)"
+    class="movie-card elevation-0 pa-2"
+    @click="handleClick(movie.id, $event)"
     hover
   >
     <div class="poster-wrapper">
@@ -24,7 +29,16 @@ function goToMovie(movieId) {
         cover
       />
     </div>
-    <v-card-title>{{ movie.title }}</v-card-title>
+    <v-tooltip v-if="movie.title.length > 20" :text="movie.title">
+      <template #activator="{ props }">
+        <v-card-title v-bind="props" class="truncate-title">
+          {{ movie.title }}
+        </v-card-title>
+      </template>
+    </v-tooltip>
+    <v-card-title v-else v-bind="props" class="truncate-title">
+      {{ movie.title }}
+    </v-card-title>
     <v-card-subtitle>
       ⭐ {{ movie.vote_average }} | 📅 {{ movie.release_date }}
     </v-card-subtitle>
@@ -35,5 +49,17 @@ function goToMovie(movieId) {
 .poster-wrapper {
   border-radius: 12px;
   overflow: hidden;
+}
+
+.movie-card {
+  transition: background-color 0.3s ease;
+}
+
+.movie-card:hover {
+  background-color: rgb(var(--v-theme-secondary));
+}
+
+.movie-card.zooming {
+  transform: scale(1.1); /* zoom in */
 }
 </style>
