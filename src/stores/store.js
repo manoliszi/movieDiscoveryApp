@@ -7,13 +7,18 @@ const BASE_URL = "https://api.themoviedb.org/3"
 
 export const useStore = defineStore('store', () => {
     const movies = ref([])
+    const moviesPagination = ref({
+        page: 1,
+        pages: 0
+    })
     const loading = ref(false)
     const moviesDetails = ref({})
 
     const fetchPopularMovies = async() => {
         loading.value = true
         try {
-            const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`, {
+            console.log('moviesPagination.value.page:', moviesPagination.value.page)
+            const res = await fetch(`${BASE_URL}/movie/popular?page=${moviesPagination.value.page}`, {
                 headers: {
                     Authorization: `Bearer ${ACCESS_TOKEN}`,
                     "Content-Type": "application/json",
@@ -24,6 +29,7 @@ export const useStore = defineStore('store', () => {
 
             const data = await res.json()
             movies.value = data.results
+            moviesPagination.value.pages = data.total_pages
         } finally {
             loading.value = false
         }
@@ -56,6 +62,7 @@ export const useStore = defineStore('store', () => {
         movies,
         loading,
         moviesDetails,
+        moviesPagination,
 
         fetchPopularMovies,
         fetchMovieDetails

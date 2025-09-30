@@ -39,8 +39,12 @@ function handleClick(movieId, event) {
     <v-card-title v-else v-bind="props" class="truncate-title">
       {{ movie.title }}
     </v-card-title>
-    <v-card-subtitle>
-      ⭐ {{ movie.vote_average }} | 📅 {{ movie.release_date }}
+    <v-card-subtitle class="d-flex align-center ga-2">
+      <v-icon icon="mdi-star" color="primary" size="x-large" />
+      {{ movie.vote_average }}
+      <v-divider vertical :thickness="2" class="border-opacity-100" color="primary" />
+      <v-icon icon="mdi-calendar" size="large" />
+      {{ movie.release_date }}
     </v-card-subtitle>
   </v-card>
 </template>

@@ -11,7 +11,7 @@
 		<v-app-bar app color="primary" dark>
 			<v-toolbar-title @click="goHome" class="cursor-pointer">Movies ~ Series</v-toolbar-title>
 			<v-spacer></v-spacer>
-			<app-button variant="text" text="Home" to="/" color="none" />
+			<app-button variant="text" text="Movies" to="/" color="none" />
 			<app-button variant="text" text="Series" to="/series" color="none" />
 			<app-button variant="text" text="Actors" to="/actors" color="none" />
 			<app-button variant="text" text="Watchlist" to="/watchlist" color="none" />
