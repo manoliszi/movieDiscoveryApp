@@ -29,7 +29,7 @@ function handleClick(movieId, event) {
         cover
       />
     </div>
-    <v-tooltip v-if="movie.title.length > 20" :text="movie.title">
+    <v-tooltip v-if="movie.title?.length > 20" :text="movie.title">
       <template #activator="{ props }">
         <v-card-title v-bind="props" class="truncate-title">
           {{ movie.title }}

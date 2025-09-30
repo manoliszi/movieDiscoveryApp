@@ -1,20 +1,32 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from "../stores/store"
 import { storeToRefs } from 'pinia'
+import AppButton from '../components/AppButton.vue'
+import MovieCard from '../components/MovieCard.vue'
 
 const { fetchMovieDetails } = useStore()
-const { moviesDetails } = storeToRefs(useStore())
+const { moviesDetails, moviesRecommendations } = storeToRefs(useStore())
 const route = useRoute()
 
 const movieId = ref(null)
 const chipColors = ['secondary', 'info', 'warning']
+const recommendations = ref(false)
 
 onMounted(() => {
   movieId.value = route.params.id
   fetchMovieDetails(movieId.value)
 })
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    movieId.value = newId
+    recommendations.value = false
+    fetchMovieDetails(newId)
+  }
+)
 
 const title = computed(() => {
   let t = moviesDetails.value[movieId.value]?.title
@@ -41,7 +53,7 @@ const gross = computed(() => {
 
 <template>
   <v-container>
-    <v-row v-if="movieId && moviesDetails[movieId]">
+    <v-row v-if="movieId && moviesDetails[movieId] && moviesRecommendations[movieId]">
         <v-col cols="12" md="6">
           <v-img
               v-if="movieId && moviesDetails[movieId]"
@@ -49,7 +61,7 @@ const gross = computed(() => {
               height="600px"
           />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" class="d-flex flex-column">
           <h1 class="mb-2">{{ title }}</h1>
           <div class="d-flex align-center ga-2 mb-2">
             {{ moviesDetails[movieId]?.release_date }}
@@ -110,10 +122,17 @@ const gross = computed(() => {
               </v-chip>
             </div>
           </div>
-          <v-switch readonly label="Adult content" hide-details inset class="no-pointer mb-2" />
+          <v-switch v-model="moviesDetails[movieId].adult" readonly label="Adult content" hide-details inset class="no-pointer mb-2" />
           <p class="mb-2">
             {{ moviesDetails[movieId]?.overview }}
           </p>
+          <div class="d-flex justify-end mt-auto">
+            <app-button variant="outlined" text="See more like this" @click="recommendations = true">
+              <template #append>
+                <v-icon icon="mdi-arrow-right" class="ml-2" size="large" />
+              </template>
+            </app-button>
+          </div>
         </v-col>
     </v-row>
     <v-row v-else>
@@ -124,6 +143,33 @@ const gross = computed(() => {
       </v-col>
     </v-row>
   </v-container>
+
+  <v-dialog v-model="recommendations" max-width="600px">
+    <v-card elevation="0">
+      <v-card-title class="d-flex">
+        More like this
+        <v-spacer />
+        <app-button variant="text" text="" color="none"  @click="recommendations = false">
+          <template #append>
+            <v-icon icon="mdi-close" size="large" />
+          </template>
+        </app-button>
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col
+            v-for="movie in moviesRecommendations[movieId]"
+            :key="movie.id"
+            cols="12"
+            sm="6"
+            class="mb-2"
+          >
+            <movie-card :movie="movie" />
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>

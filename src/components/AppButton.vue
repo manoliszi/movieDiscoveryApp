@@ -23,5 +23,8 @@ const props = defineProps({
         :color="color"
     >
         {{ text }}
+
+        <slot name="prepend" />
+        <slot name="append" />
     </v-btn>
 </template>

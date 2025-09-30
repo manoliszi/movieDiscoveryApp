@@ -13,11 +13,11 @@ export const useStore = defineStore('store', () => {
     })
     const loading = ref(false)
     const moviesDetails = ref({})
+    const moviesRecommendations = ref({})
 
     const fetchPopularMovies = async() => {
         loading.value = true
         try {
-            console.log('moviesPagination.value.page:', moviesPagination.value.page)
             const res = await fetch(`${BASE_URL}/movie/popular?page=${moviesPagination.value.page}`, {
                 headers: {
                     Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -53,6 +53,29 @@ export const useStore = defineStore('store', () => {
             if (!res.ok) throw new Error("Failed to fetch movie: " + res.statusText)
 
             moviesDetails.value[id] = await res.json()
+
+            await fetchMovieRecommendations(id)
+        } finally {
+            loading.value = false
+        }
+    }
+
+    const fetchMovieRecommendations = async(id) => {
+        loading.value = true
+        try {
+            const res = await fetch(
+                `${BASE_URL}/movie/${id}/recommendations?language=en-US&api_key=${API_KEY}`,
+                {
+                headers: {
+                    Authorization: `Bearer ${ACCESS_TOKEN}`,
+                    "Content-Type": "application/json",
+                },
+                }
+            )
+            if (!res.ok) throw new Error("Failed to fetch movie recommendations: " + res.statusText)
+
+            const data = await res.json()
+            moviesRecommendations.value[id] = data.results.splice(0, 6)
         } finally {
             loading.value = false
         }
@@ -63,8 +86,10 @@ export const useStore = defineStore('store', () => {
         loading,
         moviesDetails,
         moviesPagination,
+        moviesRecommendations,
 
         fetchPopularMovies,
-        fetchMovieDetails
+        fetchMovieDetails,
+        fetchMovieRecommendations
     }
 })
