@@ -1,7 +1,15 @@
 <script setup>
 import { useRouter } from 'vue-router'
 
-const props = defineProps(['movie'])
+const props = defineProps({
+  movie: {
+    type: Object
+  },
+  hideDetails: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const router = useRouter()
 
@@ -39,7 +47,7 @@ function handleClick(movieId, event) {
     <v-card-title v-else v-bind="props" class="truncate-title">
       {{ movie.title }}
     </v-card-title>
-    <v-card-subtitle class="d-flex align-center ga-2">
+    <v-card-subtitle v-if="!hideDetails" class="d-flex align-center ga-2">
       <v-icon icon="mdi-star" color="primary" size="x-large" />
       {{ movie.vote_average }}
       <v-divider vertical :thickness="2" class="border-opacity-100" color="primary" />

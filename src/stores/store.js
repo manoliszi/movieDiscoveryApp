@@ -75,7 +75,7 @@ export const useStore = defineStore('store', () => {
             if (!res.ok) throw new Error("Failed to fetch movie recommendations: " + res.statusText)
 
             const data = await res.json()
-            moviesRecommendations.value[id] = data.results.splice(0, 6)
+            moviesRecommendations.value[id] = data.results
         } finally {
             loading.value = false
         }
